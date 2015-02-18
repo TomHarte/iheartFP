@@ -23,6 +23,11 @@ object FunSets {
    * Returns the set of the one given element.
    */
   def singletonSet(elem: Int): Set = {x => (x == elem)}
+ 
+  /**
+    * Returns the set of all integers that satisfy f
+   */
+  def functionSet(f: Int => Boolean): Set = f
 
   /**
    * Returns the union of the two given sets,
@@ -45,7 +50,7 @@ object FunSets {
   /**
    * Returns the subset of `s` for which `p` holds.
    */
-  def filter(s: Set, p: Int => Boolean): Set = intersect(s, p)
+  def filter(s: Set, p: Int => Boolean): Set = intersect(s, functionSet(p))
 
   /**
    * The bounds for `forall` and `exists` are +/- 1000.
