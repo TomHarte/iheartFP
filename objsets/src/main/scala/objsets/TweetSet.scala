@@ -66,7 +66,7 @@ abstract class TweetSet {
    * Question: Should we implment this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-  def mostRetweeted: Tweet = ???
+  def mostRetweeted: Tweet
 
   /**
    * Returns a list containing all tweets of this set, sorted by retweet count
@@ -112,6 +112,13 @@ class Empty extends TweetSet {
 
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = acc
 
+  /**
+   *
+   * Calling `mostRetweeted` on an empty set should throw an exception of
+   * type `java.util.NoSuchElementException`.
+   *
+   */
+  def mostRetweeted: Tweet = throw new NoSuchElementException
 
   /**
    * The following methods are already implemented
@@ -131,6 +138,21 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = 
     right.filterAcc(p, left.filterAcc(p, if (p(elem)) acc.incl(elem) else acc ))
 
+  /**
+    *
+    * Returns the tweet from this set which has the greatest retweet count; so
+    * that's either the tweet here or the most retweeted of those with a higher
+    * tweet count 
+    */
+  def mostRetweeted: Tweet = {
+    val hasGreaterRetweets: Tweet => Boolean = {x => x.retweets > elem.retweets }
+    val moreProlificTweets = left.filterAcc(hasGreaterRetweets, right.filter(hasGreaterRetweets))
+ 
+    moreProlificTweets match {
+      case x: NonEmpty => moreProlificTweets.mostRetweeted
+      case x: Empty => elem
+    }
+  }
 
   /**
    * The following methods are already implemented
