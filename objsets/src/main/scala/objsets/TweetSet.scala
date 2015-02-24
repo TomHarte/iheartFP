@@ -152,7 +152,7 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     */
   def mostRetweeted: Tweet = {
     val hasGreaterRetweets: Tweet => Boolean = {x => x.retweets > elem.retweets }
-    val moreProlificTweets = left.filterAcc(hasGreaterRetweets, right.filter(hasGreaterRetweets))
+    val moreProlificTweets = left.filter(hasGreaterRetweets).union(right.filter(hasGreaterRetweets))
  
     moreProlificTweets match {
       case x: NonEmpty => moreProlificTweets.mostRetweeted
