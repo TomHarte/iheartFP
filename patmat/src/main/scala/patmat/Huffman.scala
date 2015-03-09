@@ -111,7 +111,7 @@ object Huffman {
       else trees.head :: insertInPlace(trees.tail, newTree)
     }
 
-    if (trees == Nil || trees.tail == Nil) trees
+    if (trees == List() || trees.tail == List()) trees
     else {
       val first = trees.head
       val second = trees.tail.head
@@ -166,7 +166,7 @@ object Huffman {
        case Leaf(character, _) => character :: decode(tree, bits)
     }
 
-    if (bits == Nil) Nil
+    if (bits == List()) List()
     else decodeCharacter(tree, bits) 
   }
 
@@ -198,7 +198,7 @@ object Huffman {
    */
   def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
     def encodeCharacter(tree: CodeTree, character: Char): List[Bit] = tree match {
-      case Leaf(_, _) => Nil // in its capacity as the empty list
+      case Leaf(_, _) => List()
       case Fork(left, right, _, _) => 
         if (chars(left).contains(character)) 0 :: encodeCharacter(left, character) else 1 :: encodeCharacter(right, character)
     }
@@ -226,7 +226,7 @@ object Huffman {
    * sub-trees, think of how to build the code table for the entire tree.
    */
   def convert(tree: CodeTree): CodeTable = tree match {
-    case Leaf(character, _) => List( (character, Nil) )
+    case Leaf(character, _) => List( (character, List()) )
     case Fork(left, right, _, _) => mergeCodeTables( convert(left), convert(right) )
   }
 
