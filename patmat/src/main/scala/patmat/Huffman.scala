@@ -232,7 +232,8 @@ object Huffman {
    * use it in the `convert` method above, this merge method might also do some transformations
    * on the two parameter code tables.
    */
-  def mergeCodeTables(a: CodeTable, b: CodeTable): CodeTable = ???
+  def mergeCodeTables(left: CodeTable, right: CodeTable): CodeTable = 
+    left.map( {case (character, pattern) => (character, 0 :: pattern)} ) ::: right.map( {case (character, pattern) => (character, 1 :: pattern)} )
 
   /**
    * This function encodes `text` according to the code tree `tree`.
