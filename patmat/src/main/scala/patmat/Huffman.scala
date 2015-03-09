@@ -163,7 +163,7 @@ object Huffman {
   def decode(tree: CodeTree, bits: List[Bit]): List[Char] = {
     def decodeCharacter(remainingTree: CodeTree, bits: List[Bit]): List[Char] = remainingTree match {
        case Fork(left, right, _, _) => decodeCharacter( if(bits.head == 0) left else right, bits.tail)
-       case Leaf(character, _) => List(character) ::: decode(tree, bits)
+       case Leaf(character, _) => character :: decode(tree, bits)
     }
 
     if (bits == Nil) Nil
