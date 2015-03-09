@@ -166,7 +166,8 @@ object Huffman {
        case Leaf(character, _) => List(character) ::: decode(tree, bits)
     }
 
-    decodeCharacter(tree, bits) 
+    if (bits == Nil) Nil
+    else decodeCharacter(tree, bits) 
   }
 
   /**
