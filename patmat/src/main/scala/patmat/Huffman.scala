@@ -77,7 +77,7 @@ object Huffman {
    *       println("integer is  : "+ theInt)
    *   }
    */
-  def times(chars: List[Char]): List[(Char, Int)] = chars.map(char => (char, chars.count(otherChar => char == otherChar))).distinct
+  def times(chars: List[Char]): List[(Char, Int)] = chars.distinct.map(char => (char, chars.count(otherChar => char == otherChar)))
 
   /**
    * Returns a list of `Leaf` nodes for a given frequency table `freqs`.
