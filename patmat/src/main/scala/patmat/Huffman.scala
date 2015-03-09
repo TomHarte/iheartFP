@@ -105,7 +105,7 @@ object Huffman {
    * If `trees` is a list of less than two elements, that list should be returned
    * unchanged.
    */
-  def combine(trees: List[CodeTree]): List[CodeTree] = Fork( trees.head, trees.tail.head, chars(trees.head) ::: chars(trees.tail.head), weight(trees.head) + weight(trees.tail.head) ) :: trees.tail.tail
+  def combine(trees: List[CodeTree]): List[CodeTree] = (Fork( trees.head, trees.tail.head, chars(trees.head) ::: chars(trees.tail.head), weight(trees.head) + weight(trees.tail.head) ) :: trees.tail.tail).sortBy( x => weight(x) )
 
   /**
    * This function will be called in the following way:
