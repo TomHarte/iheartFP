@@ -105,7 +105,21 @@ object Huffman {
    * If `trees` is a list of less than two elements, that list should be returned
    * unchanged.
    */
-  def combine(trees: List[CodeTree]): List[CodeTree] = (Fork( trees.head, trees.tail.head, chars(trees.head) ::: chars(trees.tail.head), weight(trees.head) + weight(trees.tail.head) ) :: trees.tail.tail).sortBy( x => weight(x) )
+  def combine(trees: List[CodeTree]): List[CodeTree] = {
+    def insertInPlace(trees: List[CodeTree], newTree: CodeTree) : List[CodeTree] = {
+      if (weight(newTree) < weight(trees.head)) newTree :: trees
+      else trees.head :: insertInPlace(trees.tail, newTree)
+    }
+
+    if (trees == Nil || trees.tail == Nil) trees
+    else {
+      val first = trees.head
+      val second = trees.tail.head
+      val remainder = trees.tail.tail
+
+      insertInPlace(trees.tail.tail, Fork( first, second, chars(first) ::: chars(second), weight(first) + weight(second) ))
+    }
+  }
 
   /**
    * This function will be called in the following way:
