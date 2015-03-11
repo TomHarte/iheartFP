@@ -113,8 +113,8 @@ object Huffman {
 
     if (trees == List() || trees.tail == List()) trees
     else {
-      val first = trees.head
-      val second = trees.tail.head
+      val first = trees(0)
+      val second = trees(1)
       val remainder = trees.tail.tail
 
       insertInPlace(trees.tail.tail, Fork( first, second, chars(first) ::: chars(second), weight(first) + weight(second) ))
@@ -200,7 +200,8 @@ object Huffman {
     def encodeCharacter(tree: CodeTree, character: Char): List[Bit] = tree match {
       case Leaf(_, _) => List()
       case Fork(left, right, _, _) => 
-        if (chars(left).contains(character)) 0 :: encodeCharacter(left, character) else 1 :: encodeCharacter(right, character)
+        if (chars(left).contains(character)) 0 :: encodeCharacter(left, character)
+        else 1 :: encodeCharacter(right, character)
     }
    
     text.flatMap( encodeCharacter(tree, _) )
