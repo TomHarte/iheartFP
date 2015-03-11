@@ -86,7 +86,7 @@ object Huffman {
    * head of the list should have the smallest weight), where the weight
    * of a leaf is the frequency of the character.
    */
-  def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = freqs.map( {case (char, weight) => Leaf(char, weight)} ).sortBy( x => x.weight )
+  def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = freqs.map( {case (char, weight) => Leaf(char, weight)} ).sortBy( _.weight )
 
   /**
    * Checks whether the list `trees` contains only one single code tree.
@@ -203,7 +203,7 @@ object Huffman {
         if (chars(left).contains(character)) 0 :: encodeCharacter(left, character) else 1 :: encodeCharacter(right, character)
     }
    
-    text.flatMap( x => encodeCharacter(tree, x))
+    text.flatMap( encodeCharacter(tree, _) )
   }
 
 
@@ -215,7 +215,7 @@ object Huffman {
    * This function returns the bit sequence that represents the character `char` in
    * the code table `table`.
    */
-  def codeBits(table: CodeTable)(char: Char): List[Bit] = table.find( x => x._1 == char ).head._2
+  def codeBits(table: CodeTable)(char: Char): List[Bit] = table.find( _._1 == char ).head._2
 
   /**
    * Given a code tree, create a code table which contains, for every character in the
@@ -244,5 +244,5 @@ object Huffman {
    * To speed up the encoding process, it first converts the code tree to a code table
    * and then uses it to perform the actual encoding.
    */
-  def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] =  text.flatMap( x => codeBits(convert(tree))(x) )
+  def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = text.flatMap(codeBits(convert(tree))(_))
 }
