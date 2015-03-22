@@ -117,7 +117,7 @@ object Huffman {
       val second = trees(1)
       val remainder = trees.tail.tail
 
-      insertInPlace(trees.tail.tail, Fork( first, second, chars(first) ::: chars(second), weight(first) + weight(second) ))
+      insertInPlace(remainder, Fork( first, second, chars(first) ::: chars(second), weight(first) + weight(second) ))
     }
   }
 
