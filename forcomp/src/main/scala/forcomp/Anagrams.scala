@@ -109,7 +109,7 @@ object Anagrams {
   def subtract(x: Occurrences, y: Occurrences): Occurrences = {
 
     val yByLetters = y.map( occurrence => occurrence._1 ).zip(y).toMap
-    val xSubtracted = x.map( { case (character, count) => (character, count - yByLetters.getOrElse(character, ('x', 0))._2) } )
+    val xSubtracted = x.map( occurrence => (occurrence._1, occurrence._2 - yByLetters.getOrElse(occurrence._1, ('x', 0))._2) )
 
     xSubtracted.filter( occurrence => occurrence._2 > 0 )
   }
