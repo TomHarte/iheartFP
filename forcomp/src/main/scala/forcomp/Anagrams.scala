@@ -21,7 +21,8 @@ object Anagrams {
    *  Note: If the frequency of some character is zero, then that character should not be
    *  in the list.
    */
-  type Occurrences = List[(Char, Int)]
+  type Occurrence = (Char, Int)
+  type Occurrences = List[Occurrence]
 
   /** The dictionary is simply a sequence of words.
    *  It is predefined and obtained as a sequence using the utility method `loadDictionary`.
@@ -81,7 +82,18 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
+  def combinations(occurrences: Occurrences): List[Occurrences] = {
+    def combinationsWith(occurrence: Occurrence, remainingOcurrences: Occurrences): List[Occurrences] = {
+      if ( occurrence._2 == 0 ) {
+        combinations( remainingOcurrences )
+      } else {
+        ( combinations( remainingOcurrences ).map( combinations => occurrence :: combinations ) ) ::: combinationsWith( (occurrence._1, occurrence._2 - 1), remainingOcurrences )
+      }
+    }
+
+    if(occurrences.isEmpty) List(List())
+    else combinationsWith( occurrences.head, occurrences.tail )
+  }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    * 
