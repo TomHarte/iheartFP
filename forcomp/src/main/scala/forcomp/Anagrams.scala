@@ -163,7 +163,7 @@ object Anagrams {
         // of the sentence 
         for {
           combinations <- combinations(occurrences)
-          words <- dictionaryByOccurrences.getOrElse(combinations, Nil)
+          words <- dictionaryByOccurrences.getOrElse(combinations, List())
           remainingWords <- anagrams(subtract(occurrences, combinations))
         } yield  words :: remainingWords
       }
