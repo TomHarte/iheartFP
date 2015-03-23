@@ -109,7 +109,7 @@ object Anagrams {
   def subtract(x: Occurrences, y: Occurrences): Occurrences = {
 
     val yByLetters = y.map( { case (character, count) => character } ).zip(y).toMap
-    val xSubtracted = x.map( { case (character, count) => (character, if (yByLetters.isDefinedAt(character)) count - yByLetters(character)._2 else count ) } )
+    val xSubtracted = x.map( { case (character, count) => (character, count - yByLetters.getOrElse(character, ('x', 0))._2) } )
 
     xSubtracted.filter( {case (character, count) => count > 0} )
   }
@@ -154,6 +154,18 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    def anagrams(occurrences: Occurrences) : List[Sentence] = {
+      if (occurrences.isEmpty) List(List())
+      else {
+        for {
+          combinations <- combinations(occurrences)
+          words <- dictionaryByOccurrences.getOrElse(combinations, Nil)
+          remainingWords <- anagrams(subtract(occurrences, combinations))
+        } yield  words :: remainingWords
+      }
+    }
 
+    anagrams(sentenceOccurrences(sentence))  
+  }
 }
