@@ -35,7 +35,7 @@ object Anagrams {
    *  same character, and are represented as a lowercase character in the occurrence list.
    */
   def wordOccurrences(w: Word): Occurrences =
-    w.toLowerCase.toList.groupBy( char => char ).map({ case (char, characters) => (char, characters.length) }).toList.sortBy(_._1)
+    w.toLowerCase.toList.groupBy( character => character ).toList.map( occurenceList => (occurenceList._1, occurenceList._2.length) ).sortBy(_._1)
 
   /** Converts a sentence into its character occurrence list. */
   def sentenceOccurrences(s: Sentence): Occurrences = wordOccurrences(s.mkString)
@@ -108,10 +108,10 @@ object Anagrams {
    */
   def subtract(x: Occurrences, y: Occurrences): Occurrences = {
 
-    val yByLetters = y.map( { case (character, count) => character } ).zip(y).toMap
+    val yByLetters = y.map( occurrence => occurrence._1 ).zip(y).toMap
     val xSubtracted = x.map( { case (character, count) => (character, count - yByLetters.getOrElse(character, ('x', 0))._2) } )
 
-    xSubtracted.filter( {case (character, count) => count > 0} )
+    xSubtracted.filter( occurrence => occurrence._2 > 0 )
   }
 
   /** Returns a list of all anagram sentences of the given sentence.
@@ -158,6 +158,9 @@ object Anagrams {
     def anagrams(occurrences: Occurrences) : List[Sentence] = {
       if (occurrences.isEmpty) List(List())
       else {
+        // i.e. for every combination from the occurrences, get the available words;
+        // for every word return it plus each of the anagrams available from the rest
+        // of the sentence 
         for {
           combinations <- combinations(occurrences)
           words <- dictionaryByOccurrences.getOrElse(combinations, Nil)
